@@ -32,3 +32,5 @@ class DBHandler(object):
     def getUsers(self):
         return self.session.query(User)
     
+    def getGroups(self):
+        return self.session.query(Group).filter_by(parent_id=None)

@@ -8,6 +8,7 @@ from Ui_AuthWindow import Ui_AuthDialog
 import os
 from DBHandler import DBHandler
 from UserWindow import UserWindow
+from Entity import Group
 
 class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None ):
@@ -17,14 +18,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.connection_string="sqlite:///%s/../../davstorage/db/devel.db" % (os.getcwd())
         self.dbhandler = DBHandler(self.connection_string)
         
-        users = self.dbhandler.getUsers()
         
-        self.items=[]
-        for u in users:
-            self.items.append(u.login)
-            
-        lm = MyListModel(self.items, self)
-        self.lstUsers.setModel(lm)
         
     def add_user(self):
         widget = UserWindow(self.dbhandler,parent=self)
@@ -32,10 +26,33 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         
     def delete_user(self):
         pass
-    def edit_user(self):
-        
+    def edit_user(self):        
         pass
+    
+    def add_group(self):
+        pass
+    def edit_group(self):
+        pass
+    def delete_group(self):
+        pass
+    def tab_changed(self, widget):
+        if widget == self.tab:
+            users = self.dbhandler.getUsers()
         
+            self.items=[]
+            for u in users:
+                self.items.append(u.login)
+                
+            lm = MyListModel(self.items, self)
+            self.lstUsers.setModel(lm)
+        elif widget == self.tabGroups:
+            for group in self.dbhandler.getGroups():                
+                item=QtGui.QTreeWidgetItem([group.name])
+                self.treeGroups.addTopLevelItem(item)
+        else:        
+            pass
+
+
 class MyListModel(QtCore.QAbstractListModel):
     def __init__(self, datain, parent=None, *args):
         """ datain: a list where each item is a row
