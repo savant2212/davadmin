@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>602</width>
-    <height>283</height>
+    <height>339</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,7 +36,7 @@
         <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <property name="elideMode">
         <enum>Qt::ElideNone</enum>
@@ -59,7 +59,7 @@
            <enum>QLayout::SetMaximumSize</enum>
           </property>
           <item>
-           <widget class="QListView" name="lstUsers"/>
+           <widget class="QListWidget" name="lstUsers"/>
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -326,6 +326,70 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>treeGroups</sender>
+   <signal>doubleClicked(QModelIndex)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>edit_group()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>205</x>
+     <y>167</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>307</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>treeGroups</sender>
+   <signal>currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>groupItemChanged(QTreeWidgetItem*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>287</x>
+     <y>142</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>273</x>
+     <y>307</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lstUsers</sender>
+   <signal>currentItemChanged(QListWidgetItem*,QListWidgetItem*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>userItemChanged(QListWidgetItem*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>135</x>
+     <y>208</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>141</x>
+     <y>288</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lstUsers</sender>
+   <signal>doubleClicked(QModelIndex)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>edit_user()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>282</x>
+     <y>148</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>278</x>
+     <y>300</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>add_user()</slot>
@@ -335,5 +399,7 @@
   <slot>edit_group()</slot>
   <slot>delete_group()</slot>
   <slot>tab_changed(QWidget*)</slot>
+  <slot>groupItemChanged(QTreeWidgetItem*)</slot>
+  <slot>userItemChanged(QListWidgetItem*)</slot>
  </slots>
 </ui>

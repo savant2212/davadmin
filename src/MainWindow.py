@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'main.ui'
 #
-# Created: Mon Nov  1 21:03:51 2010
-#      by: PyQt4 UI code generator 4.8
+# Created: Fri Nov  5 22:03:17 2010
+#      by: PyQt4 UI code generator 4.8.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -17,7 +17,7 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(602, 283)
+        MainWindow.resize(602, 339)
         MainWindow.setAutoFillBackground(True)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
@@ -39,7 +39,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_3 = QtGui.QVBoxLayout(self.verticalLayoutWidget_3)
         self.verticalLayout_3.setSizeConstraint(QtGui.QLayout.SetMaximumSize)
         self.verticalLayout_3.setObjectName(_fromUtf8("verticalLayout_3"))
-        self.lstUsers = QtGui.QListView(self.verticalLayoutWidget_3)
+        self.lstUsers = QtGui.QListWidget(self.verticalLayoutWidget_3)
         self.lstUsers.setObjectName(_fromUtf8("lstUsers"))
         self.verticalLayout_3.addWidget(self.lstUsers)
         self.horizontalLayout_2 = QtGui.QHBoxLayout()
@@ -105,7 +105,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuF_ile.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QObject.connect(self.btnAddUser, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.add_user)
         QtCore.QObject.connect(self.btnDelUser, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.delete_user)
         QtCore.QObject.connect(self.btnEditUser, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.edit_user)
@@ -113,6 +113,10 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.btnGroupEdit, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.edit_group)
         QtCore.QObject.connect(self.btnGroupDelete, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.delete_group)
         QtCore.QObject.connect(self.tabWidget, QtCore.SIGNAL(_fromUtf8("currentChanged(QWidget*)")), MainWindow.tab_changed)
+        QtCore.QObject.connect(self.treeGroups, QtCore.SIGNAL(_fromUtf8("doubleClicked(QModelIndex)")), MainWindow.edit_group)
+        QtCore.QObject.connect(self.treeGroups, QtCore.SIGNAL(_fromUtf8("currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)")), MainWindow.groupItemChanged)
+        QtCore.QObject.connect(self.lstUsers, QtCore.SIGNAL(_fromUtf8("currentItemChanged(QListWidgetItem*,QListWidgetItem*)")), MainWindow.userItemChanged)
+        QtCore.QObject.connect(self.lstUsers, QtCore.SIGNAL(_fromUtf8("doubleClicked(QModelIndex)")), MainWindow.edit_user)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

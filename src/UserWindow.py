@@ -9,11 +9,11 @@ class UserWindow(QtGui.QDialog, Ui_User):
         QtGui.QDialog.__init__(self,parent)        
         self.setupUi(self)       
         self.dbhandler = dbhandler
-        self.user = user
+        self.user = dbhandler.session.query(User).filter_by(login=user.__str__()).first()
         
         if user != None:
-            self.txtFullName = user.full_name
-            self.txtLogin    = user.login
+            self.txtFullName.setText(self.user.full_name)
+            self.txtLogin.setText(self.user.login)
     
     def validate(self):
         if self.user == None and self.txtPassword.text == '':
@@ -46,4 +46,8 @@ class UserWindow(QtGui.QDialog, Ui_User):
         
     def reject(self):
         self.close()
+        
+    def closeEvent(self, event):
+        self.parent().update_data()
+        event.accept()
         

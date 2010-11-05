@@ -4,7 +4,7 @@ from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey, Dat
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import mapper, sessionmaker, relationship
 
-from sqlalchemy.sql.expression import desc
+from sqlalchemy.sql.expression import desc, join
 import time
 from Entity import *
 from actions import actions
@@ -34,3 +34,7 @@ class DBHandler(object):
     
     def getGroups(self):
         return self.session.query(Group).filter_by(parent_id=None)
+    
+    def getUsersNotInGroup(self, group):
+        rs = self.session.query(User).from_statement("select * from users left join usergroups on users.id = usergroups.user_id where users.id not in (select user_id from usergroups where group_id=:gid)").params(gid=group.id).all()        
+        return rs
