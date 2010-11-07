@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'main.ui'
 #
-# Created: Fri Nov  5 22:03:17 2010
+# Created: Sun Nov  7 16:48:40 2010
 #      by: PyQt4 UI code generator 4.8.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -17,7 +17,7 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(602, 339)
+        MainWindow.resize(602, 355)
         MainWindow.setAutoFillBackground(True)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
@@ -86,6 +86,9 @@ class Ui_MainWindow(object):
         self.btnGroupDelete = QtGui.QPushButton(self.verticalLayoutWidget_2)
         self.btnGroupDelete.setObjectName(_fromUtf8("btnGroupDelete"))
         self.horizontalLayout_3.addWidget(self.btnGroupDelete)
+        self.btnRestriction = QtGui.QPushButton(self.verticalLayoutWidget_2)
+        self.btnRestriction.setObjectName(_fromUtf8("btnRestriction"))
+        self.horizontalLayout_3.addWidget(self.btnRestriction)
         self.verticalLayout_2.addLayout(self.horizontalLayout_3)
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
@@ -117,6 +120,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.treeGroups, QtCore.SIGNAL(_fromUtf8("currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)")), MainWindow.groupItemChanged)
         QtCore.QObject.connect(self.lstUsers, QtCore.SIGNAL(_fromUtf8("currentItemChanged(QListWidgetItem*,QListWidgetItem*)")), MainWindow.userItemChanged)
         QtCore.QObject.connect(self.lstUsers, QtCore.SIGNAL(_fromUtf8("doubleClicked(QModelIndex)")), MainWindow.edit_user)
+        QtCore.QObject.connect(self.btnRestriction, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.restr_group)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -128,6 +132,7 @@ class Ui_MainWindow(object):
         self.btnGroupAdd.setText(QtGui.QApplication.translate("MainWindow", "Add group", None, QtGui.QApplication.UnicodeUTF8))
         self.btnGroupEdit.setText(QtGui.QApplication.translate("MainWindow", "Edit group", None, QtGui.QApplication.UnicodeUTF8))
         self.btnGroupDelete.setText(QtGui.QApplication.translate("MainWindow", "Delete group", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnRestriction.setText(QtGui.QApplication.translate("MainWindow", "Restrictions", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabGroups), QtGui.QApplication.translate("MainWindow", "Groups", None, QtGui.QApplication.UnicodeUTF8))
         self.menuF_ile.setTitle(QtGui.QApplication.translate("MainWindow", "&File", None, QtGui.QApplication.UnicodeUTF8))
         self.action_Exit.setText(QtGui.QApplication.translate("MainWindow", "&Exit", None, QtGui.QApplication.UnicodeUTF8))

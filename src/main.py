@@ -8,8 +8,9 @@ from Ui_AuthWindow import Ui_AuthDialog
 import os
 from DBHandler import DBHandler
 from UserWindow import UserWindow
-from Entity import Group
+from Entity import Group, User
 from GroupWindow import GroupWindow
+from RestrictionsWindow import RestrictionsWindow
 
 class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
     currentUser = None
@@ -33,7 +34,12 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         widget.show()
         
     def delete_user(self):
-        pass
+        user = self.dbhandler.session.query(User).filter_by(login=self.currentUser).first()
+        user.is_deleted=True
+        self.dbhandler.session.add(user)
+        self.dbhandler.session.commit()
+        self.update_data() 
+        
     def edit_user(self):  
         widget = UserWindow(self.dbhandler,self.currentUser,parent=self)
         widget.show()      
@@ -49,11 +55,19 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         pass
     
     def delete_group(self):
-        pass
+        user = self.dbhandler.session.query(Group).filter_by(name=self.currentGroup).first()
+        user.is_deleted=True
+        self.dbhandler.session.add(user)
+        self.dbhandler.session.commit()
+        self.update_data()
+        
     def tab_changed(self, widget):
         self.update_data()
         pass
-    
+    def restr_group(self):
+        widget = RestrictionsWindow(self.dbhandler,self.currentGroup,parent=self)
+        widget.show()
+        pass
     def update_data(self):
         users = self.dbhandler.getUsers()
         self.lstUsers.clear()

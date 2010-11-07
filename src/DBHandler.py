@@ -30,7 +30,7 @@ class DBHandler(object):
         return None
     
     def getUsers(self):
-        return self.session.query(User)
+        return self.session.query(User).filter_by(is_deleted=False)
     
     def getGroups(self):
         return self.session.query(Group).filter_by(parent_id=None)

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>602</width>
-    <height>339</height>
+    <height>355</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -176,6 +176,13 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QPushButton" name="btnRestriction">
+              <property name="text">
+               <string>Restrictions</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
           <item>
@@ -269,7 +276,7 @@
    <slot>add_group()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>377</x>
+     <x>287</x>
      <y>262</y>
     </hint>
     <hint type="destinationlabel">
@@ -285,7 +292,7 @@
    <slot>edit_group()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>446</x>
+     <x>356</x>
      <y>256</y>
     </hint>
     <hint type="destinationlabel">
@@ -301,7 +308,7 @@
    <slot>delete_group()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>535</x>
+     <x>445</x>
      <y>258</y>
     </hint>
     <hint type="destinationlabel">
@@ -338,7 +345,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>199</x>
-     <y>307</y>
+     <y>291</y>
     </hint>
    </hints>
   </connection>
@@ -354,7 +361,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>273</x>
-     <y>307</y>
+     <y>291</y>
     </hint>
    </hints>
   </connection>
@@ -386,7 +393,23 @@
     </hint>
     <hint type="destinationlabel">
      <x>278</x>
-     <y>300</y>
+     <y>291</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnRestriction</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>restr_group()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>573</x>
+     <y>259</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>547</x>
+     <y>318</y>
     </hint>
    </hints>
   </connection>
@@ -401,5 +424,6 @@
   <slot>tab_changed(QWidget*)</slot>
   <slot>groupItemChanged(QTreeWidgetItem*)</slot>
   <slot>userItemChanged(QListWidgetItem*)</slot>
+  <slot>restr_group()</slot>
  </slots>
 </ui>
