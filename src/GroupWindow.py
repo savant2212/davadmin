@@ -32,5 +32,8 @@ class GroupWindow(QtGui.QDialog, Ui_GroupEdit):
         self.parent().update_data()
         event.accept()
     
+    def accept(self):
+        pass
+    
     def reject(self):
         self.close()

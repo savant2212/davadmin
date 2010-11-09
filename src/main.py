@@ -34,7 +34,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         widget.show()
         
     def delete_user(self):
-        user = self.dbhandler.session.query(User).filter_by(login=self.currentUser).first()
+        user = self.dbhandler.session.query(User).filter_by(login=self.currentUser.__str__()).first()
         user.is_deleted=True
         self.dbhandler.session.add(user)
         self.dbhandler.session.commit()
@@ -55,7 +55,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         pass
     
     def delete_group(self):
-        user = self.dbhandler.session.query(Group).filter_by(name=self.currentGroup).first()
+        user = self.dbhandler.session.query(Group).filter_by(name=self.currentGroup.__str__()).first()
         user.is_deleted=True
         self.dbhandler.session.add(user)
         self.dbhandler.session.commit()
@@ -68,6 +68,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         widget = RestrictionsWindow(self.dbhandler,self.currentGroup,parent=self)
         widget.show()
         pass
+    
     def update_data(self):
         users = self.dbhandler.getUsers()
         self.lstUsers.clear()
