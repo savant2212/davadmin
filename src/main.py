@@ -46,11 +46,11 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         pass
     
     def add_group(self):
-        widget = GroupWindow(self.dbhandler,None,parent=self)
+        widget = GroupWindow(self.dbhandler,None,pgroup =self.currentGroup,parent=self)
         widget.show()
         pass
     def edit_group(self):
-        widget = GroupWindow(self.dbhandler,self.currentGroup,parent=self)
+        widget = GroupWindow(self.dbhandler,self.currentGroup,pgroup =self.currentGroup, parent=self)
         widget.show()
         pass
     
@@ -91,7 +91,10 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         
         return lst
     def groupItemChanged(self, item):
-        self.currentGroup = item.text(0)
+        if item == None:
+            self.currentGroup = None
+        else:
+            self.currentGroup = item.text(0)
         pass
     
     def userItemChanged(self, item):

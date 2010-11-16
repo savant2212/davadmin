@@ -25,6 +25,7 @@ class DBHandler(object):
         restrict = self.session.query(ActionRestrict).filter_by(actor_id=user.id, object_id=1, actor_type='1').first()
         
         if restrict.action & actions['ADMIN'] != 0:
+            self.currentUser = user
             return user
         
         return None
@@ -32,9 +33,16 @@ class DBHandler(object):
     def getUsers(self):
         return self.session.query(User).filter_by(is_deleted=False)
     
+    def getCurrentUser(self):
+        #return self.currentUser
+        return self.session.query(User).filter_by(id=1, is_deleted=False).first()
+    
     def getGroups(self):
         return self.session.query(Group).filter_by(parent_id=None)
     
-    def getUsersNotInGroup(self, group):
+    def getUsersNotInGroup(self, group):        
         rs = self.session.query(User).from_statement("select * from users left join usergroups on users.id = usergroups.user_id where users.id not in (select user_id from usergroups where group_id=:gid)").params(gid=group.id).all()        
-        return rs
+        return rs   
+    
+        
+        

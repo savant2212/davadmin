@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>305</height>
+    <height>306</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -38,8 +38,14 @@
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>4</number>
+    </property>
     <property name="sizeConstraint">
      <enum>QLayout::SetDefaultConstraint</enum>
+    </property>
+    <property name="margin">
+     <number>4</number>
     </property>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
@@ -84,8 +90,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>252</x>
+     <y>296</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -100,8 +106,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>320</x>
+     <y>296</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -109,5 +115,24 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>tblUserRestriction</sender>
+   <signal>itemChanged(QTableWidgetItem*)</signal>
+   <receiver>Restrictions</receiver>
+   <slot>tblUserRestriction_itemChanged(QTableWidgetItem*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>339</x>
+     <y>182</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>234</x>
+     <y>302</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>tblUserRestriction_itemChanged(QTableWidgetItem*)</slot>
+ </slots>
 </ui>

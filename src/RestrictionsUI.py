@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'restrictions.ui'
 #
-# Created: Sun Nov  7 16:32:55 2010
+# Created: Sun Nov 14 01:18:27 2010
 #      by: PyQt4 UI code generator 4.8.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -17,7 +17,7 @@ except AttributeError:
 class Ui_Restrictions(object):
     def setupUi(self, Restrictions):
         Restrictions.setObjectName(_fromUtf8("Restrictions"))
-        Restrictions.resize(400, 305)
+        Restrictions.resize(400, 306)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -30,7 +30,9 @@ class Ui_Restrictions(object):
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 0, 401, 301))
         self.verticalLayoutWidget.setObjectName(_fromUtf8("verticalLayoutWidget"))
         self.verticalLayout = QtGui.QVBoxLayout(self.verticalLayoutWidget)
+        self.verticalLayout.setSpacing(4)
         self.verticalLayout.setSizeConstraint(QtGui.QLayout.SetDefaultConstraint)
+        self.verticalLayout.setMargin(4)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
@@ -56,6 +58,7 @@ class Ui_Restrictions(object):
         self.retranslateUi(Restrictions)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), Restrictions.accept)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), Restrictions.reject)
+        QtCore.QObject.connect(self.tblUserRestriction, QtCore.SIGNAL(_fromUtf8("itemChanged(QTableWidgetItem*)")), Restrictions.tblUserRestriction_itemChanged)
         QtCore.QMetaObject.connectSlotsByName(Restrictions)
 
     def retranslateUi(self, Restrictions):
