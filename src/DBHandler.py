@@ -34,7 +34,7 @@ class DBHandler(object):
         return self.session.query(User).filter_by(is_deleted=False)
     
     def getCurrentUser(self):
-        #return self.currentUser
+        #return self.currentUser()
         return self.session.query(User).filter_by(id=1, is_deleted=False).first()
     
     def getGroups(self):

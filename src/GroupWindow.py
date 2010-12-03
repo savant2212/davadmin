@@ -8,6 +8,7 @@ from actions import actions
 class GroupWindow(QtGui.QDialog, Ui_GroupEdit):
     addlist = []
     rmlist = []
+    is_new = True
     
     def __init__(self, dbhandler, group, pgroup=None, parent=None):
         QtGui.QDialog.__init__(self,parent)        
@@ -16,8 +17,9 @@ class GroupWindow(QtGui.QDialog, Ui_GroupEdit):
         self.group = None
         self.pgroup = None
         
-        if group != None:
-            self.group = dbhandler.session.query(Group).filter_by(name=group.__str__()).first()        
+        if group != None:            
+            self.group = dbhandler.session.query(Group).filter_by(name=group.__str__()).first()
+            self.is_new = False        
         
         if pgroup != None:
             self.pgroup = dbhandler.session.query(Group).filter_by(name=pgroup.__str__()).first()
@@ -74,25 +76,27 @@ class GroupWindow(QtGui.QDialog, Ui_GroupEdit):
         for item in self.addlist:
             self.group.users.append(self.dbhandler.session.query(User).filter_by(login=item).first())    
         
-        if self.txtGroupName.text() == "":
-            return
+        if self.is_new == True:
+            if self.txtGroupName.text() == "":
+                return           
+            
+            
+            if self.pgroup != None:
+                self.group.parent = self.pgroup
+                
+            if self.group.base_dir == None:
+                base_dir = TreeObject(self.group.name
+                                      , TreeObject.TYPE_COLLECTION
+                                      , {True: self.pgroup.base_dir, False: None}[self.pgroup != None]
+                                      , self.dbhandler.getCurrentUser().id
+                                      , None
+                                      , 0
+                                      , None
+                                      , string.join([{True: self.pgroup.base_dir.path, False: ''}[self.pgroup != None],self.group.name,''], '/')
+                            )
+                self.group.base_dir = base_dir
         
         self.group.name = self.txtGroupName.text().__str__()
-        
-        if self.pgroup != None:
-            self.group.parent = self.pgroup
-            
-        if self.group.base_dir == None:
-            base_dir = TreeObject(self.group.name
-                                  , TreeObject.TYPE_COLLECTION
-                                  , {True: self.pgroup.base_dir, False: None}[self.pgroup != None]
-                                  , self.dbhandler.getCurrentUser().id
-                                  , None
-                                  , 0
-                                  , None
-                                  , string.join([{True: self.pgroup.base_dir.path, False: ''}[self.pgroup != None],self.group.name,''], '/')
-                        )
-            self.group.base_dir = base_dir
         
         self.dbhandler.session.add(self.group)
         self.dbhandler.session.commit()

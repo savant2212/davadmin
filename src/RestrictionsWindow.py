@@ -4,7 +4,7 @@ Created on 07.11.2010
 @author: savant
 '''
 import sys
-from Entity import Group, User
+from Entity import Group, User, ActionRestrict
 from PyQt4 import QtGui, QtCore, Qt
 from RestrictionsUI import Ui_Restrictions
 from actions import actions
@@ -47,19 +47,26 @@ class RestrictionsWindow(QtGui.QDialog, Ui_Restrictions ):
                 restrictions = u.getRestrictions(self.group,dbhandler.session)                
                 for r in restrictions:
                     for i in xrange(1,self.tblUserRestriction.columnCount()):
-                        if r.action & actions[self.tblUserRestriction.horizontalHeaderItem(i).text().__str__()] != 0 :
-                            item = QtGui.QTableWidgetItem()
+                        item = QtGui.QTableWidgetItem()
+                        
+                        if r.action & actions[self.tblUserRestriction.horizontalHeaderItem(i).text().__str__()] != 0 :                            
                             item.setCheckState(2)
-                            item.setFlags(table_flags)
-                            self.tblUserRestriction.setItem(self.tblUserRestriction.rowCount()-1,i,item)                           
+                        else:
+                            item.setCheckState(0)
+                        item.setFlags(table_flags)
+                        self.tblUserRestriction.setItem(self.tblUserRestriction.rowCount()-1,i,item)                           
                     
     def tblUserRestriction_itemChanged(self, item):
         action = self.tblUserRestriction.horizontalHeaderItem(item.row()).text().__str__()
         login =  self.tblUserRestriction.item(item.row(),0).text().__str__()             
         
-        user = self.dbhandler.session.query(User).filter_by(login==login)
+        user = self.dbhandler.session.query(User).filter_by(login=login).first()
         
         restr = user.getRestrictions(self.group, self.dbhandler.session).first()
+        
+        if restr == None:
+            restr = ActionRestrict(user.id, 1, self.group.id, 0)
+            pass
         
         if item.checkState() == QtCore.Qt.Unchecked:
             restr.action = restr.action & ~actions[action]
@@ -67,7 +74,7 @@ class RestrictionsWindow(QtGui.QDialog, Ui_Restrictions ):
             restr.action = restr.action | actions[action]
             
         self.dbhandler.session.add(restr)
-        
+        self.dbhandler.session.commit()
         pass      
     
     def closeEvent(self, event):
