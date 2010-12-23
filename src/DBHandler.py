@@ -44,5 +44,22 @@ class DBHandler(object):
         rs = self.session.query(User).from_statement("select * from users left join usergroups on users.id = usergroups.user_id where users.id not in (select user_id from usergroups where group_id=:gid)").params(gid=group.id).all()        
         return rs   
     
-        
+#    def getUserRootGroup(self, user):
+#        list = []
+#        
+#        rs = self.session.query(ActionRestrict).filter_by(actor_id=user.id, actor_type=1, object_type=2)
+#        for r in rs:
+#            if r.action & actions["ADMIN"] == 0:
+#                continue 
+#            
+#            group = self.session.query(Group).filter_by(id=r.object_id).first()
+#            
+#            if group.parent == None:
+#                for id in list:
+#                     if id == group.id:
+#                         append
+#                pass
+#            else:
+#                pass
+#        pass
         

@@ -8,9 +8,10 @@ from Ui_AuthWindow import Ui_AuthDialog
 import os
 from DBHandler import DBHandler
 from UserWindow import UserWindow
-from Entity import Group, User
+from Entity import Group, User, ActionRestrict
 from GroupWindow import GroupWindow
 from RestrictionsWindow import RestrictionsWindow
+from actions import actions
 
 class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
     currentUser = None
@@ -19,7 +20,8 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         QtGui.QMainWindow.__init__(self, parent)        
         self.setupUi(self)  
         
-        self.connection_string="sqlite:///%s/../../davstorage/db/devel.db" % (os.getcwd())
+        #self.connection_string="sqlite:///%s/../../davstorage/db/devel.db" % (os.getcwd())
+        self.connection_string="postgres://davstorage:davstorage@localhost/davstorage"
         self.dbhandler = DBHandler(self.connection_string)
         self.update_data()
         
@@ -76,20 +78,49 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.lstUsers.addItem(QtGui.QListWidgetItem(u.login))                
         
         self.treeGroups.clear()
-        for group in self.dbhandler.getGroups():                
-            item=QtGui.QTreeWidgetItem([group.name])
-            item.addChildren(self.get_groupWidgetTree(group))
-            #item = self.get_groupWidgetTree(group)                
-            self.treeGroups.addTopLevelItem(item)
         
-    def get_groupWidgetTree(self, group):
+        usr = self.dbhandler.getCurrentUser();
+        
+        for group in self.dbhandler.getGroups():            
+            rs = self.dbhandler.session.query(ActionRestrict).filter_by(actor_id=usr.id, actor_type=1, object_type=2, object_id = group.id).first()
+            if rs.action & actions["ADMIN"] != 0 :
+                item=QtGui.QTreeWidgetItem([group.name])
+                item.addChildren(self.get_groupWidgetTree(group, usr))
+                #item = self.get_groupWidgetTree(group)                
+                self.treeGroups.addTopLevelItem(item)
+            else:
+                subs = self.get_groupWidgetTree(group, usr)
+                
+                for i in subs:
+                    self.treeGroups.addTopLevelItem(i)
+        
+    def get_groupWidgetTree(self, group, usr):        
         lst = []
         for g in group.subgroups:
-            gi = QtGui.QTreeWidgetItem([g.name])
-            gi.addChildren(self.get_groupWidgetTree(g))
-            lst.append(gi)
-        
+            rs = self.dbhandler.session.query(ActionRestrict).filter_by(actor_id=usr.id, actor_type=1, object_type=2, object_id = g.id).first()
+            subs = self.get_groupWidgetTree(g, usr)
+            
+            if rs != None and rs.action & actions["ADMIN"] != 0 :
+                gi = QtGui.QTreeWidgetItem([g.name])
+                gi.addChildren(subs)
+                gi.setData(0,32, rs.action)
+                lst.append(gi)
+            else:                
+                for i in subs:
+                    d = i.data(0,32)
+                    if d.toUInt()[0] & actions["ADMIN"] != 0:
+                        lst.append(i)                
         return lst
+    
+#    def get_groupWidgetTree(self, group):
+#        lst = []
+#        for g in group.subgroups:
+#            gi = QtGui.QTreeWidgetItem([g.name])
+#            gi.addChildren(self.get_groupWidgetTree(g))
+#            lst.append(gi)
+#        
+#        return lst
+
     def groupItemChanged(self, item):
         if item == None:
             self.currentGroup = None

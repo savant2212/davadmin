@@ -16,7 +16,7 @@ class UserWindow(QtGui.QDialog, Ui_User):
             self.txtLogin.setText(self.user.login)
     
     def validate(self):
-        if self.user == None and self.txtPassword.text == '':
+        if self.user == None and self.txtPassword.text() == '':
             return False
         
         return True

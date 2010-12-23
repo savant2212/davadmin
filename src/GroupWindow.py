@@ -66,8 +66,8 @@ class GroupWindow(QtGui.QDialog, Ui_GroupEdit):
         
     
     def closeEvent(self, event):
-        self.parent().update_data()
         event.accept()
+        self.parent().update_data()        
     
     def accept(self):
         for item in self.rmlist:
@@ -102,6 +102,7 @@ class GroupWindow(QtGui.QDialog, Ui_GroupEdit):
         self.dbhandler.session.commit()
         
         self.dbhandler.session.add(ActionRestrict(self.dbhandler.getCurrentUser().id, 1, self.group.base_dir.id, actions['ALL']))
+        self.dbhandler.session.add(ActionRestrict(self.dbhandler.getCurrentUser().id, 1, self.group.id, actions['ALL'],2))
         self.dbhandler.session.commit()
         self.close()
     

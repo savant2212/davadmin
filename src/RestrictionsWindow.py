@@ -38,7 +38,7 @@ class RestrictionsWindow(QtGui.QDialog, Ui_Restrictions ):
         if group != None:
             self.group = dbhandler.session.query(Group).filter_by(name=group.__str__()).first()
             self.txtGroupName.setText(self.group.name)
-            
+                        
             for u in self.group.users:
                 item = QtGui.QTableWidgetItem(u.login)
                 item.setFlags(table_flags)
@@ -48,24 +48,30 @@ class RestrictionsWindow(QtGui.QDialog, Ui_Restrictions ):
                 for r in restrictions:
                     for i in xrange(1,self.tblUserRestriction.columnCount()):
                         item = QtGui.QTableWidgetItem()
-                        
-                        if r.action & actions[self.tblUserRestriction.horizontalHeaderItem(i).text().__str__()] != 0 :                            
+                        act = actions[self.tblUserRestriction.horizontalHeaderItem(i).text().__str__()]
+                        if r.action & act == act :                            
                             item.setCheckState(2)
                         else:
                             item.setCheckState(0)
+                            
                         item.setFlags(table_flags)
                         self.tblUserRestriction.setItem(self.tblUserRestriction.rowCount()-1,i,item)                           
                     
     def tblUserRestriction_itemChanged(self, item):
-        action = self.tblUserRestriction.horizontalHeaderItem(item.row()).text().__str__()
+        if item.column() == 0:
+            return
+        
+        action = self.tblUserRestriction.horizontalHeaderItem(item.column()).text().__str__()
         login =  self.tblUserRestriction.item(item.row(),0).text().__str__()             
+        
+        
         
         user = self.dbhandler.session.query(User).filter_by(login=login).first()
         
         restr = user.getRestrictions(self.group, self.dbhandler.session).first()
         
         if restr == None:
-            restr = ActionRestrict(user.id, 1, self.group.id, 0)
+            restr = ActionRestrict(user.id, 1, self.group.id, 0, 2)
             pass
         
         if item.checkState() == QtCore.Qt.Unchecked:
