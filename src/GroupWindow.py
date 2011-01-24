@@ -76,27 +76,33 @@ class GroupWindow(QtGui.QDialog, Ui_GroupEdit):
         for item in self.addlist:
             self.group.users.append(self.dbhandler.session.query(User).filter_by(login=item).first())    
         
+        self.group.name = self.txtGroupName.text().__str__()
+        
         if self.is_new == True:
             if self.txtGroupName.text() == "":
                 return           
             
-            
+                       
             if self.pgroup != None:
                 self.group.parent = self.pgroup
                 
             if self.group.base_dir == None:
+                if self.pgroup != None:
+                    p_base_dir = self.pgroup.base_dir
+                else :
+                    p_base_dir = None
                 base_dir = TreeObject(self.group.name
                                       , TreeObject.TYPE_COLLECTION
-                                      , {True: self.pgroup.base_dir, False: None}[self.pgroup != None]
+                                      , p_base_dir
                                       , self.dbhandler.getCurrentUser().id
                                       , None
                                       , 0
                                       , None
-                                      , string.join([{True: self.pgroup.base_dir.path, False: ''}[self.pgroup != None],self.group.name,''], '/')
+                                      , string.join([(self.pgroup != None) and self.pgroup.base_dir.path or '',self.group.name,''], '/')
                             )
                 self.group.base_dir = base_dir
         
-        self.group.name = self.txtGroupName.text().__str__()
+        
         
         self.dbhandler.session.add(self.group)
         self.dbhandler.session.commit()

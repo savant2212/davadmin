@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey, DateTime, Float, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import mapper, sessionmaker, relationship
+import hashlib
 
 from sqlalchemy.sql.expression import desc, join
 import time
@@ -21,21 +22,25 @@ class DBHandler(object):
         self.session = self.SessionMK()
         
     def Authenticate(self,user,pw):
-        user = self.session.query(User).filter_by(login=user,password=pw).first()
-        restrict = self.session.query(ActionRestrict).filter_by(actor_id=user.id, object_id=1, actor_type='1').first()
+        m = hashlib.sha256()
+        m.update(pw) 
+        user = self.session.query(User).filter_by(login=user,password=m.hexdigest()).first()
         
-        if restrict.action & actions['ADMIN'] != 0:
-            self.currentUser = user
-            return user
-        
-        return None
+        if user != None:
+#            restrict = self.session.query(ActionRestrict).filter_by(actor_id=user.id, object_id=1, actor_type='1').first()
+#            
+#            if restrict.action & actions['ADMIN'] != 0:
+#                self.currentUser = user
+                self.currentUser = user
+        else:        
+            self.currentUser = None
     
     def getUsers(self):
         return self.session.query(User).filter_by(is_deleted=False)
     
     def getCurrentUser(self):
-        #return self.currentUser()
-        return self.session.query(User).filter_by(id=1, is_deleted=False).first()
+        return self.currentUser
+        #return self.session.query(User).filter_by(id=1, is_deleted=False).first()
     
     def getGroups(self):
         return self.session.query(Group).filter_by(parent_id=None)

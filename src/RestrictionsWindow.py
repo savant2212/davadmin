@@ -44,18 +44,26 @@ class RestrictionsWindow(QtGui.QDialog, Ui_Restrictions ):
                 item.setFlags(table_flags)
                 self.tblUserRestriction.insertRow(self.tblUserRestriction.rowCount())
                 self.tblUserRestriction.setItem(self.tblUserRestriction.rowCount()-1,0,item)
-                restrictions = u.getRestrictions(self.group,dbhandler.session)                
-                for r in restrictions:
+                restrictions = u.getRestrictions(self.group,dbhandler.session)     
+                if restrictions.count() == 0 :
                     for i in xrange(1,self.tblUserRestriction.columnCount()):
-                        item = QtGui.QTableWidgetItem()
-                        act = actions[self.tblUserRestriction.horizontalHeaderItem(i).text().__str__()]
-                        if r.action & act == act :                            
-                            item.setCheckState(2)
-                        else:
+                            item = QtGui.QTableWidgetItem()
                             item.setCheckState(0)
                             
-                        item.setFlags(table_flags)
-                        self.tblUserRestriction.setItem(self.tblUserRestriction.rowCount()-1,i,item)                           
+                            item.setFlags(table_flags)
+                            self.tblUserRestriction.setItem(self.tblUserRestriction.rowCount()-1,i,item)
+                else:           
+                    for r in restrictions:
+                        for i in xrange(1,self.tblUserRestriction.columnCount()):
+                            item = QtGui.QTableWidgetItem()
+                            act = actions[self.tblUserRestriction.horizontalHeaderItem(i).text().__str__()]
+                            if r.action & act == act :                            
+                                item.setCheckState(2)
+                            else:
+                                item.setCheckState(0)
+                                
+                            item.setFlags(table_flags)
+                            self.tblUserRestriction.setItem(self.tblUserRestriction.rowCount()-1,i,item)                           
                     
     def tblUserRestriction_itemChanged(self, item):
         if item.column() == 0:

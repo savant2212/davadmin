@@ -12,6 +12,7 @@ from Entity import Group, User, ActionRestrict
 from GroupWindow import GroupWindow
 from RestrictionsWindow import RestrictionsWindow
 from actions import actions
+from AuthWindow import AuthWindow
 
 class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
     currentUser = None
@@ -23,6 +24,14 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         #self.connection_string="sqlite:///%s/../../davstorage/db/devel.db" % (os.getcwd())
         self.connection_string="postgres://davstorage:davstorage@localhost/davstorage"
         self.dbhandler = DBHandler(self.connection_string)
+        
+        widget = AuthWindow(self.dbhandler,self)
+        widget.setModal(True)
+        widget.exec_()
+        
+        if self.dbhandler.getCurrentUser() == None:
+            self.close()
+            
         self.update_data()
         
     def event(self, event):
@@ -83,7 +92,8 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         
         for group in self.dbhandler.getGroups():            
             rs = self.dbhandler.session.query(ActionRestrict).filter_by(actor_id=usr.id, actor_type=1, object_type=2, object_id = group.id).first()
-            if rs.action & actions["ADMIN"] != 0 :
+                        
+            if rs != None and rs.action & actions["ADMIN"] != 0 :
                 item=QtGui.QTreeWidgetItem([group.name])
                 item.addChildren(self.get_groupWidgetTree(group, usr))
                 #item = self.get_groupWidgetTree(group)                
@@ -149,14 +159,6 @@ class MyListModel(QtCore.QAbstractListModel):
         else:
             return QtCore.QVariant()
     
-class AuthWindow(QtGui.QDialog, Ui_AuthDialog):
-    def __init__(self, parent=None):
-        QtGui.QWidget.__init__(self, parent)        
-        self.setupUi(self)  
-    def accept(self):
-        pass
-    def reject(self):
-        pass
     
 app = QtGui.QApplication(sys.argv)
 

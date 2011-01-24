@@ -2,7 +2,7 @@ from UserUI import Ui_User
 from PyQt4 import QtCore, QtGui
 from Entity import User, ActionRestrict
 from actions import actions, user_root_acts
-
+import hashlib
     
 class UserWindow(QtGui.QDialog, Ui_User):
     def __init__(self, dbhandler, user=None, parent=None):
@@ -26,13 +26,13 @@ class UserWindow(QtGui.QDialog, Ui_User):
             return
         
         if self.user == None:
-            self.user = User(self.txtLogin.text().__str__(),self.txtPassword.text().__str__(),self.txtFullName.text().__str__())
+            self.user = User(self.txtLogin.text().__str__(),hashlib.sha256( self.txtPassword.text().__str__() ).hexdigest(),self.txtFullName.text().__str__())
         else:
             self.user.full_name = self.txtFullName.text().__str__() 
             self.user.login = self.txtLogin.text().__str__()
         
-            if self.txtPassword != None:
-                self.user.password = self.txtPassword.text().__str__()
+            if self.txtPassword != None:                
+                self.user.password = hashlib.sha256( self.txtPassword.text().__str__() ).hexdigest()
         
         self.dbhandler.session.add(self.user)
         self.dbhandler.session.commit()
